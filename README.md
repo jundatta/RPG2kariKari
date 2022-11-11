@@ -1,10 +1,10 @@
-# 【遊び方】2022/11/10
+# 【遊び方】2022/11/12
 
 https://www.youtube.com/watch?v=RBkOlsDzWCo
 
 ##### １．配信でいじってるRPG2kariKariのダウンロード先です。
 
-https://xgf.nu/UK6W
+https://xgf.nu/pyxh
 
 ##### ２．適当なところに展開してください。
 
@@ -37,6 +37,6 @@ https://xgf.nu/UK6W
 
 ##### ７．表示された画面左上にある「右向き矢印アイコン」をクリックしてください。
 
-##### ８．「RPG2kari」が動き出せばOKです。
+##### ８．「RPG2kariKari」が動き出せばOKです。
 
 。。。お疲れさまでした♪
