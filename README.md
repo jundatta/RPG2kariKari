@@ -2,7 +2,7 @@
 
 https://www.youtube.com/watch?v=RBkOlsDzWCo
 
-##### １．配信でいじってるRPG2kariのダウンロード先です。
+##### １．配信でいじってるRPG2kariKariのダウンロード先です。
 
 https://xgf.nu/UK6W
 
@@ -33,7 +33,7 @@ https://xgf.nu/UK6W
 （４）画面右下の「Install」ボタンを押してください。  
 （５）メイン画面に戻ってメニューの「Sketch/Import Library...」で表示されるメニューの一番下に「Ptmx」が表示されていればOKです。  
 
-##### ６．RPG2kari\RPG2kari.pdeをダブルクリックしてください。
+##### ６．RPG2kari\RPG2kariKari.pdeをダブルクリックしてください。
 
 ##### ７．表示された画面左上にある「右向き矢印アイコン」をクリックしてください。
 
