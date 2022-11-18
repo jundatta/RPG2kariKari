@@ -1,10 +1,11 @@
-# 【遊び方】2022/11/12
+# 【遊び方】2022/11/18
 
 https://www.youtube.com/watch?v=RBkOlsDzWCo
 
 ##### １．配信でいじってるRPG2kariKariのダウンロード先です。
+～コングラチュレーション画面401～410～
 
-https://xgf.nu/pyxh
+https://xgf.nu/nJci
 
 ##### ２．適当なところに展開してください。
 
