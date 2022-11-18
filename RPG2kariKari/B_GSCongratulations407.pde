@@ -69,7 +69,7 @@ class GameSceneCongratulations407 extends GameSceneCongratulationsBase {
     translate(width/2, height/2);
     scale(1, -1, 1);
 
-    ofBackground(239);
+    background(239);
     noFill();
     rectMode(CENTER);
 
@@ -204,15 +204,15 @@ class GameSceneCongratulations407 extends GameSceneCongratulationsBase {
   PVector make_point(int len, int param) {
     param = param % 100;
     if (param < 25) {
-      return new PVector(ofMap(param, 0, 25, -len * 0.5, len * 0.5), -len * 0.5);
+      return new PVector(map(param, 0, 25, -len * 0.5, len * 0.5), -len * 0.5);
     }
     if (param < 50) {
-      return new PVector(len * 0.5, ofMap(param, 25, 50, -len * 0.5, len * 0.5));
+      return new PVector(len * 0.5, map(param, 25, 50, -len * 0.5, len * 0.5));
     }
     if (param < 75) {
-      return new PVector(ofMap(param, 50, 75, len * 0.5, -len * 0.5), len * 0.5);
+      return new PVector(map(param, 50, 75, len * 0.5, -len * 0.5), len * 0.5);
     }
-    return new PVector(-len * 0.5, ofMap(param, 75, 100, len * 0.5, -len * 0.5));
+    return new PVector(-len * 0.5, map(param, 75, 100, len * 0.5, -len * 0.5));
   }
   
   @Override void mousePressed() {

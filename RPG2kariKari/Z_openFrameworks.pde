@@ -156,6 +156,9 @@ class ofMeshFace {
 int ofGetFrameNum() {
   return frameCount;
 }
+void ofSetLineWidth(float s) {
+  strokeWeight(s);
+}
 void ofRotateX(float degrees) {
   rotateX(radians(degrees));
 }
@@ -165,21 +168,6 @@ void ofRotateY(float degrees) {
 void ofRotateZ(float degrees) {
   rotateZ(radians(degrees));
 }
-float ofMap(float value, float inputMin, float inputMax, float outputMin, float outputMax) {
-  return map(value, inputMin, inputMax, outputMin, outputMax);
-}
-void ofBackground(int brightness) {
-  background(brightness);
-}
-void ofSetLineWidth(float lineWidth) {
-  strokeWeight(lineWidth);
-}
 void ofSeedRandom(int val) {
   randomSeed(val);
-}
-float ofRandom(float max) {
-  return random(max);
-}
-float ofRandom(float min, float max) {
-  return random(min, max);
 }

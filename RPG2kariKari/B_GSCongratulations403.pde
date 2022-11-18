@@ -23,7 +23,7 @@ class GameSceneCongratulations403 extends GameSceneCongratulationsBase {
     PVector location = new PVector(0, 0, 0);
 
     Actor(ArrayList<PVector> location_list, IntList destination_list) {
-      select_index = (int)ofRandom(location_list.size());
+      select_index = (int)random(location_list.size());
       while (true) {
         if (!destination_list.hasValue(select_index)) {
           destination_list.append(select_index);
@@ -41,7 +41,7 @@ class GameSceneCongratulations403 extends GameSceneCongratulationsBase {
         select_index = next_index;
         IntList ni = next_index_list.get(select_index);
         int retry = ni.size();
-        next_index = ni.get((int)ofRandom(ni.size()));
+        next_index = ni.get((int)random(ni.size()));
         while (--retry > 0) {
           if (!destination_list.hasValue(next_index)) {
             if (tmp_index != next_index) {
@@ -154,7 +154,7 @@ class GameSceneCongratulations403 extends GameSceneCongratulationsBase {
 
     // いい感じにするための適当な位置合わせ＼(^_^)／
     translate(width * 0.025, -height * 0.2);
-    ofBackground(239);
+    background(239);
     ofSetLineWidth(2);
 
     face.draw(color(239));
