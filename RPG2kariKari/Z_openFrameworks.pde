@@ -123,7 +123,7 @@ class ofMesh {
     shape(sh);
   }
   // fill()の色を指定して描画する
-  void draw(color fill) {
+  void draw(PGraphics pg, color fill) {
     PShape sh = createShape();
     sh.setStroke(false);
     sh.beginShape(TRIANGLES);
@@ -135,7 +135,11 @@ class ofMesh {
     for (int i = 0; i < indices.size(); i++) {
       sh.setFill(i, fill);
     }
-    shape(sh);
+    pg.shape(sh);
+  }
+  void draw(color fill) {
+    PGraphics pg = getGraphics();
+    draw(pg, fill);
   }
   void drawFaces() {
     draw();
