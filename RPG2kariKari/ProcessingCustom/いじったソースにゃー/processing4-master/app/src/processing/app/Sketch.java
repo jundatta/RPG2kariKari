@@ -1828,21 +1828,12 @@ public class Sketch {
   }
 
 
+  // Used by GUI Builder for Processing
+  // https://github.com/processing/processing4/issues/545
+  // https://github.com/processing/processing4/issues/596
   public SketchCode getCode(int index) {
     return code[index];
   }
-
-
-  /*
-  public int getCodeIndex(SketchCode who) {
-    for (int i = 0; i < codeCount; i++) {
-      if (who == code[i]) {
-        return i;
-      }
-    }
-    return -1;
-  }
-  */
 
 
   public SketchCode getCurrentCode() {

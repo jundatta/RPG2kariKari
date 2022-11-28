@@ -163,7 +163,6 @@ public class JScrollableMenu extends JMenu {
         JPopupMenu popup = getPopupMenu();
         popup.addMouseWheelListener(new MouseAdapter() {
             @Override public void mouseWheelMoved(MouseWheelEvent e) {
-//                System.out.println("mouseWheel!!");
                 if (e.getWheelRotation() < 0) {
                     scrollDown();
                 } else {

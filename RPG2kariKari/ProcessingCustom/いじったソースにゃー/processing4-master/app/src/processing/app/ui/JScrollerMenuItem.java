@@ -57,7 +57,6 @@ public class JScrollerMenuItem extends JMenuItem {
     protected void processMouseEvent(MouseEvent e) {
         ScrollableMenuEvent ee = null;
         int mouseEventId = e.getID();
-        System.out.println("processMouseEvent!!");
         if (mouseEventId == MouseEvent.MOUSE_PRESSED) {
             // マウスダウン時、スクロール開始
             ee = new ScrollableMenuEvent(this, true);
@@ -69,11 +68,6 @@ public class JScrollerMenuItem extends JMenuItem {
         if (ee != null) {
             fireScrollableMenuEvent(ee);
         }
-    }
-
-    @Override
-    protected void processMouseWheelEvent(MouseWheelEvent e) {
-        System.out.println("processMouseWheelEvent!!");
     }
     /**
      * スクローラブルメニューイベントを送信する
