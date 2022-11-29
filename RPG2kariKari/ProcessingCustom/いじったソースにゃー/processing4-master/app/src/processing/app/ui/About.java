@@ -87,6 +87,6 @@ public class About extends Window {
 
     g.setFont(Toolkit.getSansFont(12, Font.PLAIN));
     g.setColor(Color.DARK_GRAY);
-    g.drawString("2nd EDITION Ver2.31", 26, 29);
+    g.drawString("2nd EDITION Ver2.31", width - 120, height - 7);
   }
 }

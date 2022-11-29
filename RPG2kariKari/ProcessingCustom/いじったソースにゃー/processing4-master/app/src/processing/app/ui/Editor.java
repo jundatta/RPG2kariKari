@@ -1090,7 +1090,7 @@ public abstract class Editor extends JFrame implements RunnerListener {
     public void actionPerformed(ActionEvent e) {
       textarea.paste();
       sketch.setModified(true);
-    	handleAutoFormat();
+      handleAutoFormat();
     }
 
     public boolean canDo() {
