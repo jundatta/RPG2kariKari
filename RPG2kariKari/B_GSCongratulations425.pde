@@ -7,20 +7,27 @@
 //
 
 class GameSceneCongratulations425 extends GameSceneCongratulationsBase {
+  PGraphics pg;
+
   @Override void setup() {
     //angleMode(DEGREES);
-    textAlign(CENTER, CENTER);
-    textSize(32);
+    pg = createGraphics(width, height);
+    pg.beginDraw();
+    pg.textAlign(CENTER, CENTER);
+    pg.textSize(32 * 1.5f);
+    pg.strokeCap(ROUND);
+    pg.background(100);
+    pg.endDraw();
   }
   @Override void draw() {
     push();
-    background(100);
+    pg.beginDraw();
     float x = width / 2;
     float y = height / 2;
     float r = min(x, y);
 
     float weight = 5*1.5f;
-    strokeWeight(weight);
+    pg.strokeWeight(weight);
     r -= weight/2.0f;
 
     float r_m = r * 2 / 3.0f;
@@ -40,26 +47,28 @@ class GameSceneCongratulations425 extends GameSceneCongratulationsBase {
     float minuteAngle = radians(map(minute + second/60.0f, 0, 60, -90, 270));
     float secondAngle = radians(map(second + millis/1000.0f, 0, 60, -90, 270));
 
-    circle(x, y, 2 * r);
-    line(x, y, x + r_h * cos(hourAngle), y + r_h * sin(hourAngle));
-    line(x, y, x + r_m * cos(minuteAngle), y + r_m * sin(minuteAngle));
+    pg.circle(x, y, 2 * r);
+    pg.line(x, y, x + r_h * cos(hourAngle), y + r_h * sin(hourAngle));
+    pg.line(x, y, x + r_m * cos(minuteAngle), y + r_m * sin(minuteAngle));
 
-    strokeWeight(1);
-    line(x, y, x + r_m * cos(secondAngle), y + r_m * sin(secondAngle));
+    pg.strokeWeight(1);
+    pg.line(x, y, x + r_m * cos(secondAngle), y + r_m * sin(secondAngle));
 
     for (int i = 1; i <= 60; i++) {
       float angle = radians(map(i, 0, 60, -90, 270));
 
       if (i % 5 == 0) {
         int idx = i / 5 - 1;
-        push();
-        fill(0);
-        text(numerals[idx], x + r_num * cos(angle), y + r_num * sin(angle));
-        pop();
-        strokeWeight(5);
-      } else strokeWeight(1);
-      line( x + r_inner * cos(angle), y + r_inner * sin(angle), x + r * cos(angle), y + r * sin(angle));
+        pg.push();
+        pg.fill(0);
+        pg.text(numerals[idx], x + r_num * cos(angle), y + r_num * sin(angle));
+        pg.pop();
+        pg.strokeWeight(5);
+      } else pg.strokeWeight(1);
+      pg.line( x + r_inner * cos(angle), y + r_inner * sin(angle), x + r * cos(angle), y + r * sin(angle));
     }
+    pg.endDraw();
+    image(pg, 0, 0);
     pop();
 
     logoRightLower(#ff0000);
