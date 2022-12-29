@@ -81,4 +81,51 @@ static class P5JS {
   static float fract(float value) {
     return value - (int)value;
   }
+
+  // https://www.peko-step.com/tool/hslrgb.html#ppick3
+  static color hsla2rgba(int H, int S, int L, float A) {
+    int MAX, MIN;
+    if (L < 50) {
+      MAX = (int)(2.55f * (L + L * (S / 100.0f)));
+      MIN = (int)(2.55f * (L - L * (S / 100.0f)));
+    } else {
+      MAX = (int)(2.55f * (L + (100 - L) * (S / 100.0f)));
+      MIN = (int)(2.55f * (L - (100 - L) * (S / 100.0f)));
+    }
+
+    mPApplet.push();
+    mPApplet.colorMode(RGB, 255, 255, 255, 1.0f);
+
+    int r, g, b;
+    if (H <= 60) {
+      r = MAX;
+      g = (int)((H / 60.0f) * (MAX - MIN)) + MIN;
+      b = MIN;
+    } else if (H <= 120) {
+      r = (int)(((120 - H) / 60.0f) * (MAX - MIN)) + MIN;
+      g = MAX;
+      b = MIN;
+    } else if (H <= 180) {
+      r = MIN;
+      g = MAX;
+      b = (int)(((H - 120) / 60.0f) * (MAX - MIN)) + MIN;
+    } else if (H <= 240) {
+      r = MIN;
+      g = (int)(((240 - H) / 60.0f) * (MAX - MIN)) + MIN;
+      b = MAX;
+    } else if (H <= 300) {
+      r = (int)(((H - 240) / 60.0f) * (MAX - MIN)) + MIN;
+      g = MIN;
+      b = MAX;
+    } else {
+      r = MAX;
+      g = MIN;
+      b = (int)(((360 - H) / 60.0f) * (MAX - MIN)) + MIN;
+    }
+    color c = mPApplet.color(r, g, b, A);
+
+    mPApplet.pop();
+
+    return c;
+  }
 }
