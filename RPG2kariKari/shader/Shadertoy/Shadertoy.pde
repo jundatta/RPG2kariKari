@@ -1,7 +1,7 @@
 // こちらがオリジナルです。
-// 【作者】reinderさん
-// 【作品名】Misty Lake
-// https://www.shadertoy.com/view/MsB3WR
+// 【作者】BigWIngsさん
+// 【作品名】Dying Universe
+// https://www.shadertoy.com/view/MllSDX
 
 PShader sd;
 int startMillis;
@@ -14,16 +14,13 @@ void setup() {
 
   sd = loadShader("Shadertoy.glsl");
   sd.set("iResolution", (float)width, (float)height, 0.0f);
+  //sd.set("iChannel0", loadImage("iChannel0.png"));
+  //sd.set("iChannel1", loadImage("iChannel1.png"));
+  //sd.set("iChannel2", loadImage("iChannel2.png"));
+  
   // 最初のミリ秒を取り込んでおく
   startMillis = millis();
   startCount = frameCount;
-  // iChannel0。。。noise()の元ネタの画像。
-  // ⇒画像が荒いと霧が発生しない。細かい画像で霧が発生した（うまくいくようになった）
-  // ⇒画像の細かさを比べるためにShadertoyのホームページでも表示させてみるとよくわかる！！
-  //  fragColor = texture(iChannel0, q);
-  sd.set("iChannel0", loadImage("iChannel0.png"));
-  sd.set("iChannel1", loadImage("iChannel1.png"));
-  sd.set("iChannel2", loadImage("iChannel2.png"));
 }
 
 void draw() {
