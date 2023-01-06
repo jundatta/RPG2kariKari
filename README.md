@@ -1,11 +1,12 @@
-# 【遊び方】2023/01/05
+# 【遊び方】2023/01/07
 
 https://www.youtube.com/watch?v=RBkOlsDzWCo
 
 ##### １．配信でいじってるRPG2kariKariのダウンロード先です。
-～コングラチュレーション画面401～460
+～コングラチュレーション画面401～470
 
-https://xgf.nu/x7sL
+https://xgf.nu/PLe0
+
 ⇒カスタマイズしたProcessing IDEは4.1.1対応です。
 
 ##### ２．適当なところに展開してください。
