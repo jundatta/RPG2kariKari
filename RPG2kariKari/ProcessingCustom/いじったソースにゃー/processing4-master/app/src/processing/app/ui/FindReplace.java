@@ -41,7 +41,7 @@ import processing.app.Preferences;
  * Find & Replace window for the Processing editor.
  */
 public class FindReplace extends JFrame {
-  Editor editor;
+  final Editor editor;
 
   static final int BORDER = Platform.isMacOS() ? 20 : 13;
 
@@ -142,36 +142,33 @@ public class FindReplace extends JFrame {
     }
     setFound(false);
 
-    Group buttonsVerticalGroup = layout.createParallelGroup(); // Creates group for arranging buttons vertically
-    buttonsVerticalGroup.addComponent(findButton)
-    .addComponent(previousButton)
-    .addComponent(replaceAndFindButton)
-    .addComponent(replaceButton)
-    .addComponent(replaceAllButton);
+    // Creates group for arranging buttons vertically
+    Group buttonsVerticalGroup = layout.createParallelGroup()
+      .addComponent(findButton)
+      .addComponent(previousButton)
+      .addComponent(replaceAndFindButton)
+      .addComponent(replaceButton)
+      .addComponent(replaceAllButton);
 
-    layout.setHorizontalGroup(layout
-        .createSequentialGroup()
-        .addGap(BORDER)
-        .addGroup(layout.createParallelGroup()
-            .addGroup(GroupLayout.Alignment.TRAILING, // TRAILING makes everything right alinged
-                layout.createSequentialGroup()
-                    .addGap(replaceLabel.getPreferredSize().width
-                        - findLabel.getPreferredSize().width)
-                    .addComponent(findLabel)
-                    .addComponent(findField))
-            .addGroup(GroupLayout.Alignment.TRAILING,
-                layout.createSequentialGroup()
-                    .addComponent(replaceLabel)
-                    .addGroup(layout.createParallelGroup()
-                        .addComponent(replaceField)
-                        .addGroup(GroupLayout.Alignment.LEADING,
-                                  layout.createSequentialGroup()
-                                      .addComponent(ignoreCaseBox)
-                                      .addComponent(allTabsBox)
-                                      .addComponent(wrapAroundBox)
-                                      .addGap(0))))
-            .addGroup(GroupLayout.Alignment.CENTER,buttonsHorizontalGroup))
-        .addGap(BORDER)
+    layout.setHorizontalGroup(layout.createSequentialGroup()
+      .addGap(BORDER)
+      .addGroup(layout.createParallelGroup()
+        // TRAILING makes everything right aligned
+        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+          .addGap(replaceLabel.getPreferredSize().width - findLabel.getPreferredSize().width)
+          .addComponent(findLabel)
+          .addComponent(findField))
+        .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+          .addComponent(replaceLabel)
+          .addGroup(layout.createParallelGroup()
+            .addComponent(replaceField)
+            .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+              .addComponent(ignoreCaseBox)
+              .addComponent(allTabsBox)
+              .addComponent(wrapAroundBox)
+              .addGap(0))))
+        .addGroup(GroupLayout.Alignment.CENTER,buttonsHorizontalGroup))
+      .addGap(BORDER)
     );
 
 //    layout.linkSize(SwingConstants.HORIZONTAL, findButton, replaceButton, replaceAllButton, replaceAndFindButton, previousButton);
@@ -179,63 +176,34 @@ public class FindReplace extends JFrame {
     layout.setVerticalGroup(layout.createSequentialGroup()
       .addGap(BORDER)
       .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-          .addComponent(findLabel)
-          .addComponent(findField))
+        .addComponent(findLabel)
+        .addComponent(findField))
       .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-          .addComponent(replaceLabel)
-          .addComponent(replaceField))
+        .addComponent(replaceLabel)
+        .addComponent(replaceField))
       .addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-          .addComponent(ignoreCaseBox)
-          .addComponent(allTabsBox)
-          .addComponent(wrapAroundBox))
-          .addGroup(buttonsVerticalGroup)
-      .addGap(BORDER)
-      );
+        .addComponent(ignoreCaseBox)
+        .addComponent(allTabsBox)
+        .addComponent(wrapAroundBox))
+        .addGroup(buttonsVerticalGroup)
+      .addGap(BORDER));
 
     setLocationRelativeTo(null); // center
     Dimension size = layout.preferredLayoutSize(pain);
     setSize(size.width, size.height);
     Dimension screen = Toolkit.getScreenSize();
     setLocation((screen.width - size.width) / 2,
-                      (screen.height - size.height) / 2);
+                (screen.height - size.height) / 2);
 
-    replaceButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        replace();
-      }
-    });
+    replaceButton.addActionListener(e -> replace());
+    replaceAllButton.addActionListener(e -> replaceAll());
+    replaceAndFindButton.addActionListener(e -> replaceAndFindNext());
 
-    replaceAllButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        replaceAll();
-      }
-    });
+//    findButton.addActionListener(e -> findNext());
+//    previousButton.addActionListener(e -> findPrevious());
+    Toolkit.applyAction(editor.findNextAction, findButton);
+    Toolkit.applyAction(editor.findPreviousAction, previousButton);
 
-    replaceAndFindButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        replaceAndFindNext();
-      }
-    });
-
-    findButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        findNext();
-      }
-    });
-
-    previousButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        findPrevious();
-      }
-    });
-
-    // you mustn't replace what you haven't found, my son
-    // semantics of replace are "replace the current selection with the replace field"
-    // so whether we have found before or not is irrelevent
-    // replaceButton.setEnabled(false);
-    // replaceFindButton.setEnabled(false);
-
-    // make the find button the blinky default
     getRootPane().setDefaultButton(findButton);
 
     setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -244,22 +212,45 @@ public class FindReplace extends JFrame {
         handleClose();
       }
     });
-    Toolkit.registerWindowCloseKeys(getRootPane(), new ActionListener() {
-      public void actionPerformed(ActionEvent actionEvent) {
-        handleClose();
-      }
-    });
+    Toolkit.registerWindowCloseKeys(getRootPane(), actionEvent -> handleClose());
     Toolkit.setIcon(this);
 
-    // hack to to get first field to focus properly on osx
+    // hack to get first field to focus properly on macOS
     addWindowListener(new WindowAdapter() {
       public void windowActivated(WindowEvent e) {
-        //System.out.println("activating");
-        /*boolean ok =*/ findField.requestFocusInWindow();
-        //System.out.println("got " + ok);
+        findField.requestFocusInWindow();
         findField.selectAll();
       }
     });
+
+    // An attempt to set the menu bar so that key shortcuts for Find items
+    // work from inside this window. Unfortunately, it breaks on macOS because
+    // closing the window triggers the "default" JMenuBar, no matter what.
+    // It works fine when going back and forth between the Find window and the
+    // Editor window, but then when you close the Find window, the Editor
+    // has only the default menu bar. The last setJMenuBar() call inside
+    // windowDeactivated() seems to be ignored. Or maybe it's immediately
+    // replaced? Oddly, the key shortcuts still work, so it may be that the
+    // menu bar itself is simply not (visually) updated. [fry 230116]
+    /*
+    addWindowListener(new WindowAdapter() {
+      JMenuBar editorMenuBar;
+
+      public void windowActivated(WindowEvent e) {
+        // Steal the menu bar from the Editor
+        if (editorMenuBar == null) {
+          editorMenuBar = editor.getJMenuBar();
+        }
+        setJMenuBar(editorMenuBar);
+      }
+
+      @Override
+      public void windowDeactivated(WindowEvent e) {
+        editor.setJMenuBar(editorMenuBar);
+      }
+    });
+    */
+
     pack();
     setResizable(true);
     setLocationRelativeTo(null);
@@ -267,7 +258,6 @@ public class FindReplace extends JFrame {
 
 
   public void handleClose() {
-    //System.out.println("handling close now");
     findString = findField.getText();
     replaceString = replaceField.getText();
 
@@ -277,7 +267,7 @@ public class FindReplace extends JFrame {
 	Preferences.setBoolean("findreplace.wrap_around", wrapAroundBox.isSelected());
 	Preferences.save();
 
-    // this object should eventually become dereferenced
+    // this object should eventually become de-referenced
     setVisible(false);
   }
 
@@ -380,13 +370,11 @@ public class FindReplace extends JFrame {
     if (searchTerm.length() != 0) {
       String text = editor.getText();
 
-      // Started work on find/replace across tabs. These two variables store
-      // the original tab and selection position so that it knew when to stop
-      // rotating through.
+      // Started work on find/replace across tabs. These two variables
+      // store the original tab and selection position so that it knew
+      // when to stop rotating through.
       Sketch sketch = editor.getSketch();
       int tabIndex = sketch.getCurrentCodeIndex();
-//    int selIndex = backwards ?
-//      editor.getSelectionStart() : editor.getSelectionStop();
 
       if (ignoreCase) {
         searchTerm = searchTerm.toLowerCase();
@@ -407,13 +395,14 @@ public class FindReplace extends JFrame {
           // For searching in all tabs, wrapping always happens.
 
           int tempIndex = tabIndex;
-          // Look for searchterm in all tabs.
+          // Look for search term in all tabs.
           while (tabIndex <= sketch.getCodeCount() - 1) {
             if (tabIndex == sketch.getCodeCount() - 1) {
               // System.out.println("wrapping.");
               tabIndex = -1;
-            } else if (tabIndex == sketch.getCodeCount() - 1) {
-              break;
+              // removing for 4.1.2, this was never being run, but is it hiding a bug? [fry 230116]
+//            } else if (tabIndex == sketch.getCodeCount() - 1) {
+//              break;
             }
 
             try {
@@ -438,7 +427,7 @@ public class FindReplace extends JFrame {
             }
           }
 
-          // searchterm wasn't found in any of the tabs.
+          // search term wasn't found in any of the tabs.
           // No tab switching should happen, restore tabIndex
           if (nextIndex == -1) {
             tabIndex = tempIndex;
@@ -464,8 +453,9 @@ public class FindReplace extends JFrame {
             if (tabIndex == 0) {
               //System.out.println("wrapping.");
               tabIndex = sketch.getCodeCount();
-            } else if (tabIndex == 0) {
-              break;
+              // removing for 4.1.2, this was never being run, but is it hiding a bug? [fry 230116]
+//            } else if (tabIndex == 0) {
+//              break;
             }
             try {
               Document doc = sketch.getCode(tabIndex - 1).getDocument();
@@ -502,7 +492,7 @@ public class FindReplace extends JFrame {
           sketch.setCurrentCode(tabIndex);
         }
         editor.setSelection(nextIndex, nextIndex + searchTerm.length());
-      } else {
+      //} else {
         //Toolkit.getDefaultToolkit().beep();
       }
       if (nextIndex != -1) {
@@ -520,23 +510,24 @@ public class FindReplace extends JFrame {
     replaceAndFindButton.setEnabled(found);
   }
 
-/**
- * Replace the current selection with whatever's in the
+
+  /**
+   * Replace the current selection with whatever is in the
    * replacement text field.
- * @param isCompoundEdit True if the action is to be marked as a copmound edit
- */
+   */
   public void replace(boolean isCompoundEdit) {
     editor.setSelectedText(replaceField.getText(), isCompoundEdit);
 
-    editor.getSketch().setModified(true);  // This necessary- calling replace()
+    // This necessary because calling replace()
     // doesn't seem to mark a sketch as modified
+    editor.getSketch().setModified(true);
 
     setFound(false);
   }
 
 
   /**
-   * Replace the current selection with whatever's in the
+   * Replace the current selection with whatever is in the
    * replacement text field, marking the action as a compound edit.
    */
   public void replace() {
@@ -545,7 +536,7 @@ public class FindReplace extends JFrame {
 
 
   /**
-   * Replace the current selection with whatever's in the
+   * Replace the current selection with whatever is in the
    * replacement text field, and then find the next match
    */
   public void replaceAndFindNext() {
@@ -574,7 +565,7 @@ public class FindReplace extends JFrame {
         int stopIndex = startIndex + replaceField.getText().length();
         if (editor.getSketch().getCurrentCodeIndex() == startTab &&
             (caret >= startIndex && (caret <= stopIndex))) {
-          // we've reached where we started, so stop the replace
+          // we've reached where we started, so stop the replacement
           Toolkit.beep();
           editor.statusNotice("Reached beginning of search!");
           break;
@@ -618,8 +609,7 @@ public class FindReplace extends JFrame {
 
 
   /**
-   * Returns true if find next/previous will work, for graying-
-   * out of menu items.
+   * Returns true if Find Next/Previous will work. Used to disable menu items.
    */
   public boolean canFindNext() {
     return findField.getText().length() != 0;

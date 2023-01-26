@@ -131,6 +131,9 @@ public abstract class Editor extends JFrame implements RunnerListener {
   /** Menu Actions updated on the opening of the edit menu. */
   protected List<UpdatableAction> editMenuUpdatable = new ArrayList<>();
 
+  protected FindNextAction findNextAction;
+  protected FindPreviousAction findPreviousAction;
+
   /** The currently selected tab's undo manager and caret positions*/
   private UndoManager undo;
   // maintain caret position during undo operations
@@ -633,7 +636,19 @@ public abstract class Editor extends JFrame implements RunnerListener {
     base.populateToolsMenu(toolsMenu);
     menubar.add(toolsMenu);
 
-    menubar.add(buildHelpMenu());
+    JMenu helpMenu = buildHelpMenu();
+    if (Platform.isMacOS()) {
+      // There's a bug on macOS since at least 2016 that leaves the
+      // Help menu disabled after a modal dialog has been shown.
+      // In 2018, it was closed by Oracle with a claim that it couldn't
+      // be reproduced: https://bugs.openjdk.org/browse/JDK-8196655
+      // The workaround is to add a space to the end of the menu name,
+      // which disables whatever macOS behavior is causing the problem.
+      // https://github.com/processing/processing4/issues/638
+      helpMenu.setText(helpMenu.getText() + " ");
+    }
+    menubar.add(helpMenu);
+
     Toolkit.setMenuMnemonics(menubar);
     setJMenuBar(menubar);
   }
@@ -776,15 +791,15 @@ public abstract class Editor extends JFrame implements RunnerListener {
     });
     menu.add(item);
 
+    item = Toolkit.newJMenuItem(findNextAction = new FindNextAction(), 'G');
+    editMenuUpdatable.add(findNextAction);
+    menu.add(item);
+
+    item = Toolkit.newJMenuItemShift(findPreviousAction = new FindPreviousAction(), 'G');
+    editMenuUpdatable.add(findPreviousAction);
+    menu.add(item);
+
     UpdatableAction action;
-    item = Toolkit.newJMenuItem(action = new FindNextAction(), 'G');
-    editMenuUpdatable.add(action);
-    menu.add(item);
-
-    item = Toolkit.newJMenuItemShift(action = new FindPreviousAction(), 'G');
-    editMenuUpdatable.add(action);
-    menu.add(item);
-
     item = Toolkit.newJMenuItem(action = new SelectionForFindAction(), 'E');
     editMenuUpdatable.add(action);
     menu.add(item);
