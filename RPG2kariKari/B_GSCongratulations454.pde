@@ -47,7 +47,7 @@ class GameSceneCongratulations454 extends GameSceneCongratulationsBase {
 
           //glm::vec3 noise_location = glm::vec4(x, y, len * 0.5, 0) * rotation;
           PVector noise_location = rotation.mult(new PVector(x, y, len * 0.5), null);
-          int noise_value = (int)map(openFrameworks.ofNoise(noise_location.x * 0.025, noise_location.y * 0.025, noise_location.z * 0.025, ofGetFrameNum() * 0.03), 0, 1, 0, 10);
+          int noise_value = (int)map(openFrameworksNoise.ofNoise(noise_location.x * 0.025, noise_location.y * 0.025, noise_location.z * 0.025, ofGetFrameNum() * 0.03), 0, 1, 0, 10);
           if (noise_value % 2 == 0) {
             continue;
           }

@@ -30,7 +30,7 @@ class GameSceneCongratulations432 extends GameSceneCongratulationsBase {
         ppp.add(p2);
         PVector noise_seed = PVector.div(ppp, 3.0f);
         //float noise_value = openFrameworks.ofNoise(glm::vec4(noise_seed * 0.25, ofGetFrameNum() * 0.008));
-        float noise_value = openFrameworks.ofNoise(noise_seed.x * 0.25f, noise_seed.y * 0.25f, noise_seed.z * 0.25f, ofGetFrameNum() * 0.008f);
+        float noise_value = openFrameworksNoise.ofNoise(noise_seed.x * 0.25f, noise_seed.y * 0.25f, noise_seed.z * 0.25f, ofGetFrameNum() * 0.008f);
         scale = 30;
         if (noise_value > 0.65) {
           scale = (int)map(noise_value, 0.65, 1, 30, 50);
@@ -59,7 +59,7 @@ class GameSceneCongratulations432 extends GameSceneCongratulationsBase {
         ppp.add(p2);
         noise_seed = PVector.div(ppp, 3.0f);
         //noise_value = openFrameworks.ofNoise(glm::vec4(noise_seed * 0.25, ofGetFrameNum() * 0.008));
-        noise_value = openFrameworks.ofNoise(noise_seed.x * 0.25f, noise_seed.y * 0.25f, noise_seed.z * 0.25f, ofGetFrameNum() * 0.008f);
+        noise_value = openFrameworksNoise.ofNoise(noise_seed.x * 0.25f, noise_seed.y * 0.25f, noise_seed.z * 0.25f, ofGetFrameNum() * 0.008f);
         scale = 30;
         if (noise_value > 0.65) {
           scale = (int)map(noise_value, 0.65, 1, 30, 50);

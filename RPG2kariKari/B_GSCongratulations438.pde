@@ -22,9 +22,9 @@ class GameSceneCongratulations438 extends GameSceneCongratulationsBase {
     for (int len = 100; len <= 350; len += 250) {
       PVector noise_seed = new PVector(random(1000), random(1000), random(1000));
       for (int i = 0; i < 20; i++) {
-        float angle_x = map(openFrameworks.ofNoise(noise_seed.x, (ofGetFrameNum() + i) * 0.003), 0, 1, -PI, PI);
-        float angle_y = map(openFrameworks.ofNoise(noise_seed.y, (ofGetFrameNum() + i) * 0.003), 0, 1, -PI, PI);
-        float angle_z = map(openFrameworks.ofNoise(noise_seed.z, (ofGetFrameNum() + i) * 0.003), 0, 1, -PI, PI);
+        float angle_x = map(openFrameworksNoise.ofNoise(noise_seed.x, (ofGetFrameNum() + i) * 0.003), 0, 1, -PI, PI);
+        float angle_y = map(openFrameworksNoise.ofNoise(noise_seed.y, (ofGetFrameNum() + i) * 0.003), 0, 1, -PI, PI);
+        float angle_z = map(openFrameworksNoise.ofNoise(noise_seed.z, (ofGetFrameNum() + i) * 0.003), 0, 1, -PI, PI);
 
         PMatrix3D rotation = new PMatrix3D();
         rotation.rotateX(angle_x);

@@ -60,8 +60,8 @@ class GameSceneCongratulations428 extends GameSceneCongratulationsBase {
     }
 
     for (int i = 0; i < 1; i++) {
-      int deg_start = (int)map(openFrameworks.ofNoise(random(1000), ofGetFrameNum() * 0.005), 0, 1, -360, 360);
-      int radius = (int)map(openFrameworks.ofNoise(random(1000), ofGetFrameNum() * 0.01), 0, 1, 0, 400);
+      int deg_start = (int)map(openFrameworksNoise.ofNoise(random(1000), ofGetFrameNum() * 0.005), 0, 1, -360, 360);
+      int radius = (int)map(openFrameworksNoise.ofNoise(random(1000), ofGetFrameNum() * 0.01), 0, 1, 0, 400);
       for (int deg = deg_start; deg < deg_start + 360; deg += 60) {
         PVector noise_location = new PVector(radius * cos(deg * DEG_TO_RAD), radius * sin(deg * DEG_TO_RAD), 0);
         noise_location_list.add(noise_location);
@@ -173,7 +173,7 @@ class GameSceneCongratulations428 extends GameSceneCongratulationsBase {
       }
     }
   }
-  
+
   @Override void mousePressed() {
     gGameStack.change(new GameSceneTitle());
   }

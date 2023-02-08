@@ -25,7 +25,7 @@ class GameSceneCongratulations463 extends GameSceneCongratulationsBase {
       float noise_seed = random(1000);
       for (int x = 0; x < width; x += span) {
         for (int y = 0; y < height; y += span) {
-          float noise_value = openFrameworks.ofNoise(noise_seed, x * 0.005, y * 0.005 + ofGetFrameNum() * 0.01, ofGetFrameNum() * 0.005);
+          float noise_value = openFrameworksNoise.ofNoise(noise_seed, x * 0.005, y * 0.005 + ofGetFrameNum() * 0.01, ofGetFrameNum() * 0.005);
           if (noise_value <= 0.45 || noise_value >= 0.55) {
             continue;
           }

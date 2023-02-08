@@ -46,7 +46,7 @@ class GameSceneCongratulations411 extends GameSceneCongratulationsBase {
       avg.add(triangle.getVertex(2));
       avg.div(3);
 
-      var noise_value = openFrameworks.ofNoise(avg.x * 0.005, avg.y * 0.005, avg.z * 0.005, ofGetFrameNum() * 0.01);
+      var noise_value = openFrameworksNoise.ofNoise(avg.x * 0.005, avg.y * 0.005, avg.z * 0.005, ofGetFrameNum() * 0.01);
 
       PMatrix3D rotation_xyz = new PMatrix3D();
       if (noise_value < 0.5) {

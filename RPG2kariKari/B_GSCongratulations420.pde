@@ -46,7 +46,7 @@ class GameSceneCongratulations420 extends GameSceneCongratulationsBase {
       float y = vertex.y * 0.0015f;
       float z = vertex.z * 0.0015f;
       float w = ofGetFrameNum() * 0.01;
-      var noise_value = openFrameworks.ofNoise(x, y, z, w);
+      var noise_value = openFrameworksNoise.ofNoise(x, y, z, w);
 
       vertex.normalize();
       if (noise_value > 0.5 && noise_value < 0.55) {

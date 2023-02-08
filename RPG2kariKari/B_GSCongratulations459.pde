@@ -29,7 +29,7 @@ class GameSceneCongratulations459 extends GameSceneCongratulationsBase {
         PVector location = new PVector(radius * cos(deg * DEG_TO_RAD), radius * sin(deg * DEG_TO_RAD));
         //int z = ofMap(ofNoise(glm::vec3(location * 0.005, ofGetFrameNum() * 0.005)), 0, 1, 0, radius);
         PVector noiseSource = new PVector(location.x * 0.005, location.y * 0.005, ofGetFrameNum() * 0.005);
-        int z = (int)map(openFrameworks.ofNoise(noiseSource.x, noiseSource.y, noiseSource.z), 0, 1, 0, radius);
+        int z = (int)map(openFrameworksNoise.ofNoise(noiseSource.x, noiseSource.y, noiseSource.z), 0, 1, 0, radius);
 
         face.addVertex(new PVector(location.x, location.y, 0));
         face.addVertex(new PVector(location.x, location.y, z));

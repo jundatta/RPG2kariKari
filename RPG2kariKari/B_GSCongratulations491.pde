@@ -25,16 +25,16 @@ class GameSceneCongratulations491 extends GameSceneCongratulationsBase {
       fill(0, 0, 255);
       for (int k = 0; k < 35; k++) {
         PVector location = new PVector(
-          map(openFrameworks.ofNoise(noise_seed.x, k * 0.002 + ofGetFrameNum() * 0.001), 0, 1, -350, 350),
-          map(openFrameworks.ofNoise(noise_seed.y, k * 0.002 + ofGetFrameNum() * 0.001), 0, 1, -350, 350));
+          map(openFrameworksNoise.ofNoise(noise_seed.x, k * 0.002 + ofGetFrameNum() * 0.001), 0, 1, -350, 350),
+          map(openFrameworksNoise.ofNoise(noise_seed.y, k * 0.002 + ofGetFrameNum() * 0.001), 0, 1, -350, 350));
         circle(location.x, location.y, 12 * 2);
       }
 
       fill(random(255), 100, 255);
       for (int k = 0; k < 35; k++) {
         PVector location = new PVector(
-          map(openFrameworks.ofNoise(noise_seed.x, k * 0.002 + ofGetFrameNum() * 0.001), 0, 1, -350, 350),
-          map(openFrameworks.ofNoise(noise_seed.y, k * 0.002 + ofGetFrameNum() * 0.001), 0, 1, -350, 350));
+          map(openFrameworksNoise.ofNoise(noise_seed.x, k * 0.002 + ofGetFrameNum() * 0.001), 0, 1, -350, 350),
+          map(openFrameworksNoise.ofNoise(noise_seed.y, k * 0.002 + ofGetFrameNum() * 0.001), 0, 1, -350, 350));
         circle(location.x, location.y, 8 * 2);
       }
     }

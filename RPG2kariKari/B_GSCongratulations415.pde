@@ -56,15 +56,15 @@ class GameSceneCongratulations415 extends GameSceneCongratulationsBase {
 
     for (float phi_deg = 0; phi_deg < 360; phi_deg += phi_deg_step) {
       for (float theta_deg = 0; theta_deg < 180; theta_deg += theta_deg_step) {
-        var noise_value = openFrameworks.ofNoise(radius * cos(phi_deg * DEG_TO_RAD) * 0.02, radius * sin(phi_deg * DEG_TO_RAD) * 0.02, radius * cos(theta_deg * DEG_TO_RAD) * 0.02, ofGetFrameNum() * 0.005);
+        var noise_value = openFrameworksNoise.ofNoise(radius * cos(phi_deg * DEG_TO_RAD) * 0.02, radius * sin(phi_deg * DEG_TO_RAD) * 0.02, radius * cos(theta_deg * DEG_TO_RAD) * 0.02, ofGetFrameNum() * 0.005);
         if (noise_value < 0.45) {
           continue;
         }
 
-        var noise_1 = openFrameworks.ofNoise(radius * cos(phi_deg * DEG_TO_RAD) * 0.02, radius * sin(phi_deg * DEG_TO_RAD) * 0.02, radius * cos((theta_deg - theta_deg_step) * DEG_TO_RAD) * 0.02, ofGetFrameNum() * 0.005);
-        var noise_2 = openFrameworks.ofNoise(radius * cos((phi_deg + phi_deg_step) * DEG_TO_RAD) * 0.02, radius * sin((phi_deg + phi_deg_step) * DEG_TO_RAD) * 0.02, radius * cos(theta_deg * DEG_TO_RAD) * 0.02, ofGetFrameNum() * 0.005);
-        var noise_3 = openFrameworks.ofNoise(radius * cos((phi_deg - phi_deg_step) * DEG_TO_RAD) * 0.02, radius * sin((phi_deg - phi_deg_step) * DEG_TO_RAD) * 0.02, radius * cos(theta_deg * DEG_TO_RAD) * 0.02, ofGetFrameNum() * 0.005);
-        var noise_4 = openFrameworks.ofNoise(radius * cos(phi_deg * DEG_TO_RAD) * 0.02, radius * sin(phi_deg * DEG_TO_RAD) * 0.02, radius * cos((theta_deg + theta_deg_step) * DEG_TO_RAD) * 0.02, ofGetFrameNum() * 0.005);
+        var noise_1 = openFrameworksNoise.ofNoise(radius * cos(phi_deg * DEG_TO_RAD) * 0.02, radius * sin(phi_deg * DEG_TO_RAD) * 0.02, radius * cos((theta_deg - theta_deg_step) * DEG_TO_RAD) * 0.02, ofGetFrameNum() * 0.005);
+        var noise_2 = openFrameworksNoise.ofNoise(radius * cos((phi_deg + phi_deg_step) * DEG_TO_RAD) * 0.02, radius * sin((phi_deg + phi_deg_step) * DEG_TO_RAD) * 0.02, radius * cos(theta_deg * DEG_TO_RAD) * 0.02, ofGetFrameNum() * 0.005);
+        var noise_3 = openFrameworksNoise.ofNoise(radius * cos((phi_deg - phi_deg_step) * DEG_TO_RAD) * 0.02, radius * sin((phi_deg - phi_deg_step) * DEG_TO_RAD) * 0.02, radius * cos(theta_deg * DEG_TO_RAD) * 0.02, ofGetFrameNum() * 0.005);
+        var noise_4 = openFrameworksNoise.ofNoise(radius * cos(phi_deg * DEG_TO_RAD) * 0.02, radius * sin(phi_deg * DEG_TO_RAD) * 0.02, radius * cos((theta_deg + theta_deg_step) * DEG_TO_RAD) * 0.02, ofGetFrameNum() * 0.005);
 
         var index = face.getNumVertices();
         ArrayList<PVector> vertices = new ArrayList();

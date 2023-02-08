@@ -26,7 +26,7 @@ class GameSceneCongratulations423 extends GameSceneCongratulationsBase {
     for (int x = (int)(len * -0.5); x <= len * 0.5; x += span) {
       for (int y = len * -2; y <= len * 0.5; y += span) {
         for (int z = (int)(len * -0.5); z <= len * 0.5; z += span) {
-          float noise_value = openFrameworks.ofNoise(x * 0.01, z * 0.01, y * 0.01 + ofGetFrameNum() * 0.08);
+          float noise_value = openFrameworksNoise.ofNoise(x * 0.01, z * 0.01, y * 0.01 + ofGetFrameNum() * 0.08);
           if (y > len * 0.35) {
             noise_value += map(y, len * 0.35, len, 0.25, 1);
           } else if (y < len * 0.15) {
@@ -179,7 +179,7 @@ class GameSceneCongratulations423 extends GameSceneCongratulationsBase {
       frame_target.addColor(frame_color);
     }
   }
-  
+
   @Override void mousePressed() {
     gGameStack.change(new GameSceneTitle());
   }
