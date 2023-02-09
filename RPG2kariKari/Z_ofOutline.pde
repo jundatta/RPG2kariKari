@@ -21,6 +21,10 @@ static class ofOutline {
 }
 
 static class openFrameworksOutline {
+  static final char k20Code = ' ';
+  static final float[][] k20Coord = {
+  };
+
   static final char k30Code = '0';
   static final float[][] k30Coord = {
     { 43.60, -74.40, 47.06, -71.41, 49.98, -67.92, 52.37, -64.03, 54.29, -59.90, 55.78, -55.58, 56.75, -51.12, 57.47, -46.61, 57.89, -42.06, 57.87, -37.49, 57.82, -32.92, 57.33, -28.38, 56.56, -23.88, 55.43, -19.46, 53.67, -15.24, 51.48, -11.25, 48.74, -7.61, 45.66, -4.24, 41.81, -1.80, 37.63, -0.09, 33.17, 0.90, 28.60, 0.80, 24.12, 0.02, 19.88, -1.55, 15.90, -3.81, 12.75, -7.11, 10.04, -10.75, 7.87, -14.77, 6.53, -19.13, 5.31, -23.53, 4.73, -28.06, 4.16, -32.60, 4.16, -37.17, 4.16, -41.74, 4.51, -46.29, 5.08, -50.82, 5.93, -55.30, 7.16, -59.70, 8.99, -63.88, 10.99, -67.99, 14.02, -71.41, 17.64, -74.14, 21.62, -76.33, 26.02, -77.52, 30.56, -77.94, 35.11, -77.61, 39.53, -76.47, },
@@ -359,6 +363,9 @@ static class openFrameworksOutline {
   static ArrayList<ofOutline> ofOutline() {
     ArrayList<ofOutline> outlineWords = new ArrayList();
     ofOutline outline;
+
+    outline = new ofOutline(k20Code, k20Coord);
+    outlineWords.add(outline);
 
     outline = new ofOutline(k30Code, k30Coord);
     outlineWords.add(outline);

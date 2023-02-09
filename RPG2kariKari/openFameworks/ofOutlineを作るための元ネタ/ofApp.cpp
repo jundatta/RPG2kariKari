@@ -74,7 +74,7 @@ void ofApp::setup() {
 	this->font_size = 80;
 	this->font.loadFont("fonts/Kazesawa-Bold.ttf", this->font_size, true, true, true);
 
-	this->word = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	this->word = " 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	// Processing java用ソースコードを吐き出したい
 	// 初期値のテーブルを定義してデータ構造をセットアップしよう
