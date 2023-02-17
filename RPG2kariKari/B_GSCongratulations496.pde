@@ -60,11 +60,6 @@ class GameSceneCongratulations496 extends GameSceneCongratulationsBase {
 
   @Override void draw() {
     push();
-    //  background(0, 0, 50, 40);
-    noStroke();
-    fill(0, 0, 50, 40);
-    rect(0, 0, width, height);
-
     float t = (frameCount%loopLength)/speed;
     sinput = map(t, 0, 1, 0, TAU);
 
