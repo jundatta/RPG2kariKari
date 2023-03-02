@@ -3,7 +3,7 @@
 /*
   Part of the Processing project - http://processing.org
 
-  Copyright (c) 2012-19 The Processing Foundation
+  Copyright (c) 2012-23 The Processing Foundation
   Copyright (c) 2004-12 Ben Fry and Casey Reas
   Copyright (c) 2001-04 Massachusetts Institute of Technology
 
@@ -24,7 +24,6 @@
 package processing.app.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -247,19 +246,14 @@ public abstract class Editor extends JFrame implements RunnerListener {
     editorPanel.add(textarea);
     upper.add(editorPanel);
 
-    // set colors and fonts for the painter object
-//    PdeTextArea pta = getPdeTextArea();
-//    if (pta != null) {
-//      pta.setMode(mode);
-//    }
-
     splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, upper, footer);
 
-    // disable this because it hides the message area (Google Code issue #745)
+    // disable this because it hides the message area
+    // https://github.com/processing/processing/issues/784
     splitPane.setOneTouchExpandable(false);
     // repaint child panes while resizing
     splitPane.setContinuousLayout(true);
-    // if window increases in size, give all of increase to
+    // if window increases in size, give all the increase to
     // the textarea in the upper pane
     splitPane.setResizeWeight(1D);
     // remove any ugly borders added by PLAFs (doesn't fix everything)
@@ -280,7 +274,7 @@ public abstract class Editor extends JFrame implements RunnerListener {
       public void finishDraggingTo(int location) {
         super.finishDraggingTo(location);
         // JSplitPane issue: if you only make the lower component visible at
-        // the last minute, its minmum size is ignored.
+        // the last minute, its minimum size is ignored.
         if (location > splitPane.getMaximumDividerLocation()) {
           splitPane.setDividerLocation(splitPane.getMaximumDividerLocation());
         }
@@ -537,7 +531,7 @@ public abstract class Editor extends JFrame implements RunnerListener {
    */
   public void rebuildToolbar() {
     toolbar.rebuild();
-    toolbar.revalidate();  // necessary to handle sub-components
+    toolbar.revalidate();  // necessary to handle subcomponents
   }
 
 
@@ -587,9 +581,9 @@ public abstract class Editor extends JFrame implements RunnerListener {
     }
 
     toolTipFont = Toolkit.getSansFont(Toolkit.zoom(9), Font.PLAIN);
-    toolTipTextColor = Theme.getColor("errors.selection.fgcolor");
-    toolTipWarningColor = Theme.getColor("errors.selection.warning.bgcolor");
-    toolTipErrorColor = Theme.getColor("errors.selection.error.bgcolor");
+    toolTipTextColor = Theme.get("errors.selection.fgcolor");
+    toolTipWarningColor = Theme.get("errors.selection.warning.bgcolor");
+    toolTipErrorColor = Theme.get("errors.selection.error.bgcolor");
 
     JPopupMenu popup = modePopup.getPopupMenu();
     // Cannot use instanceof because com.formdev.flatlaf.ui.FlatPopupMenuBorder
@@ -600,8 +594,7 @@ public abstract class Editor extends JFrame implements RunnerListener {
     popup.setBackground(Theme.getColor("mode.popup.enabled.bgcolor"));
 
     for (Component comp : modePopup.getMenuComponents()) {
-      if (comp instanceof JMenuItem) {
-        JMenuItem item = (JMenuItem) comp;
+      if (comp instanceof JMenuItem item) {
         if (item.getUI() instanceof PdeMenuItemUI) {
           ((PdeMenuItemUI) item.getUI()).updateTheme();
         } else {
@@ -704,7 +697,14 @@ public abstract class Editor extends JFrame implements RunnerListener {
     item.addActionListener(e -> handlePrint());
     fileMenu.add(item);
 
-    // Mac OS X already has its own preferences and quit menu.
+    /*
+    fileMenu.addSeparator();
+    item = new JMenuItem("Restart");
+    item.addActionListener(e -> base.handleRestart());
+    fileMenu.add(item);
+    */
+
+    // macOS already has its own preferences and quit menu.
     // That's right! Think different, b*tches!
     if (!Platform.isMacOS()) {
       fileMenu.addSeparator();
@@ -1129,14 +1129,12 @@ public abstract class Editor extends JFrame implements RunnerListener {
         caretRedoStack.push(caret);
         textarea.setCaretPosition(caret);
         textarea.scrollToCaret();
-      } catch (Exception ignore) {
-      }
+      } catch (Exception ignore) { }
+
       try {
         undo.undo();
-      } catch (CannotUndoException ex) {
-        //System.out.println("Unable to undo: " + ex);
-        //ex.printStackTrace();
-      }
+      } catch (CannotUndoException ignored) { }
+
       updateUndoState();
       redoAction.updateRedoState();
       if (sketch != null) {
@@ -1715,94 +1713,6 @@ public abstract class Editor extends JFrame implements RunnerListener {
     textarea.selectAll();
   }
 
-//  /**
-//   * @param moveUp
-//   *          true to swap the selected lines with the line above, false to swap
-//   *          with the line beneath
-//   */
-  /*
-  public void handleMoveLines(boolean moveUp) {
-    startCompoundEdit();
-
-    int startLine = textarea.getSelectionStartLine();
-    int stopLine = textarea.getSelectionStopLine();
-
-    // if more than one line is selected and none of the characters of the end
-    // line are selected, don't move that line
-    if (startLine != stopLine
-        && textarea.getSelectionStop() == textarea.getLineStartOffset(stopLine))
-      stopLine--;
-
-    int replacedLine = moveUp ? startLine - 1 : stopLine + 1;
-    if (replacedLine < 0 || replacedLine >= textarea.getLineCount())
-      return;
-
-    final String source = getText();
-
-    int replaceStart = textarea.getLineStartOffset(replacedLine);
-    int replaceEnd = textarea.getLineStopOffset(replacedLine);
-    if (replaceEnd == source.length() + 1)
-      replaceEnd--;
-
-    int selectionStart = textarea.getLineStartOffset(startLine);
-    int selectionEnd = textarea.getLineStopOffset(stopLine);
-    if (selectionEnd == source.length() + 1)
-      selectionEnd--;
-
-    String replacedText = source.substring(replaceStart, replaceEnd);
-    String selectedText = source.substring(selectionStart, selectionEnd);
-    if (replacedLine == textarea.getLineCount() - 1) {
-      replacedText += "\n";
-      selectedText = selectedText.substring(0, selectedText.length() - 1);
-    } else if (stopLine == textarea.getLineCount() - 1) {
-      selectedText += "\n";
-      replacedText = replacedText.substring(0, replacedText.length() - 1);
-    }
-
-    int newSelectionStart, newSelectionEnd;
-    if (moveUp) {
-      // Change the selection, then change the line above
-      textarea.select(selectionStart, selectionEnd);
-      textarea.setSelectedText(replacedText);
-
-      textarea.select(replaceStart, replaceEnd);
-      textarea.setSelectedText(selectedText);
-
-      newSelectionStart = textarea.getLineStartOffset(startLine - 1);
-      newSelectionEnd = textarea.getLineStopOffset(stopLine - 1) -  1;
-    } else {
-      // Change the line beneath, then change the selection
-      textarea.select(replaceStart, replaceEnd);
-      textarea.setSelectedText(selectedText);
-
-      textarea.select(selectionStart, selectionEnd);
-      textarea.setSelectedText(replacedText);
-
-      newSelectionStart = textarea.getLineStartOffset(startLine + 1);
-      newSelectionEnd = textarea.getLineStopOffset(stopLine + 1) - 1;
-    }
-
-    textarea.select(newSelectionStart, newSelectionEnd);
-    stopCompoundEdit();
-  }
-  */
-
-
-  /*
-  public void handleDeleteLines() {
-    int startLine = textarea.getSelectionStartLine();
-    int stopLine = textarea.getSelectionStopLine();
-
-    int start = textarea.getLineStartOffset(startLine);
-    int end = textarea.getLineStopOffset(stopLine);
-    if (end == getText().length() + 1)
-      end--;
-
-    textarea.select(start, end);
-    textarea.setSelectedText("");
-  }
-  */
-
 
   public void handleAutoFormat() {
     final String source = getText();
@@ -1988,38 +1898,17 @@ public abstract class Editor extends JFrame implements RunnerListener {
 
 
   static public boolean checkParen(char[] array, int index, int stop) {
-//  boolean paren = false;
-//  int stepper = i + 1;
-//  while (stepper < mlength) {
-//    if (array[stepper] == '(') {
-//      paren = true;
-//      break;
-//    }
-//    stepper++;
-//  }
     while (index < stop) {
-//    if (array[index] == '(') {
-//      return true;
-//    } else if (!Character.isWhitespace(array[index])) {
-//      return false;
-//    }
       switch (array[index]) {
-      case '(':
-        return true;
-
-      case ' ':
-      case '\t':
-      case '\n':
-      case '\r':
-        index++;
-        break;
-
-      default:
-//      System.out.println("defaulting because " + array[index] + " " + PApplet.hex(array[index]));
-        return false;
+        case '(' -> {
+          return true;
+        }
+        case ' ', '\t', '\n', '\r' -> index++;
+        default -> {
+          return false;
+        }
       }
     }
-//  System.out.println("exiting " + new String(array, index, stop - index));
     return false;
   }
 
@@ -2168,8 +2057,8 @@ public abstract class Editor extends JFrame implements RunnerListener {
       // highlight the safest option ala apple hig
       pane.setInitialValue(options[0]);
 
-      // on macosx, setting the destructive property places this option
-      // away from the others at the lefthand side
+      // On macOS, setting the destructive property places
+      // this option away from the others at the left-hand side.
       pane.putClientProperty("Quaqua.OptionPane.destructiveOption", 2);
 
       JDialog dialog = pane.createDialog(this, null);
@@ -2196,85 +2085,9 @@ public abstract class Editor extends JFrame implements RunnerListener {
    * shouldn't rely on any of its variables being initialized already.
    */
   protected void handleOpenInternal(String path) throws EditorException {
-    // All this logic should be happening back in Base, not here.
-    // Presumably it lived here so that other Modes could override the
-    // behavior, but that changes with 4.0 beta 6. [fry 220206]
-
-    /*
-    // check to make sure that this .pde file is
-    // in a folder of the same name
-    final File file = new File(path);
-    final File parentFile = new File(file.getParent());
-    final String parentName = parentFile.getName();
-    final String defaultName = parentName + "." + mode.getDefaultExtension();
-    final File altFile = new File(file.getParent(), defaultName);
-
-    //noinspection StatementWithEmptyBody
-    if (defaultName.equals(file.getName())) {
-      // no beef with this guy
-    } else if (altFile.exists()) {
-      // The user selected a source file from the same sketch,
-      // but open the file with the default extension instead.
-      path = altFile.getAbsolutePath();
-    } else if (!mode.canEdit(file)) {
-      final String modeName = mode.getTitle().equals("Java") ?
-        "Processing" : (mode.getTitle() + " Mode");
-      throw new EditorException(modeName + " can only open its own sketches\n" +
-                                "and other files ending in " +
-                                mode.getDefaultExtension());
-    } else {
-      final String properParent =
-        file.getName().substring(0, file.getName().lastIndexOf('.'));
-
-      Object[] options = { Language.text("prompt.ok"), Language.text("prompt.cancel") };
-      String prompt =
-        "The file \"" + file.getName() + "\" needs to be inside\n" +
-        "a sketch folder named \"" + properParent + "\".\n" +
-        "Create this folder, move the file, and continue?";
-
-      int result = JOptionPane.showOptionDialog(this,
-                                                prompt,
-                                                "Moving",
-                                                JOptionPane.YES_NO_OPTION,
-                                                JOptionPane.QUESTION_MESSAGE,
-                                                null,
-                                                options,
-                                                options[0]);
-
-      if (result == JOptionPane.YES_OPTION) {
-        // create properly named folder
-        File properFolder = new File(file.getParent(), properParent);
-        if (properFolder.exists()) {
-          throw new EditorException("A folder named \"" + properParent + "\" " +
-                                    "already exists. Can't open sketch.");
-        }
-        if (!properFolder.mkdirs()) {
-          throw new EditorException("Could not create the sketch folder.");
-        }
-        // copy the sketch inside
-        File properPdeFile = new File(properFolder, file.getName());
-        File origPdeFile = new File(path);
-        try {
-          Util.copyFile(origPdeFile, properPdeFile);
-        } catch (IOException e) {
-          throw new EditorException("Could not copy to a proper location.", e);
-        }
-
-        // remove the original file, so user doesn't get confused
-        if (!origPdeFile.delete()) {
-          Messages.err("Could not delete " + origPdeFile);
-        }
-
-        // update with the new path
-        path = properPdeFile.getAbsolutePath();
-
-      } else {  //if (result == JOptionPane.NO_OPTION) {
-        // Catch all other cases, including Cancel or ESC
-        //return false;
-        throw new EditorException();
-      }
-    }
-    */
+    // Prior to 4.0 beta 6, a lot of logic happened here that was
+    // instead moved into Base. Probably was here so that other Modes
+    // could override the behavior, but that was too messy. [fry 220206]
 
     try {
       sketch = new Sketch(path, this);
@@ -2359,20 +2172,20 @@ public abstract class Editor extends JFrame implements RunnerListener {
   public boolean handleSaveAs() {
     statusNotice(Language.text("editor.status.saving"));
     try {
-      //noinspection StatementWithEmptyBody
-      if (!sketch.saveAs()) {
+      if (sketch.saveAs()) {
         // No longer showing "Done" message except in cases where a
         // progress bar is necessary. Message will come from Sketch.
         //statusNotice(Language.text("editor.status.saving.done"));
+        return true;
+
       } else {
         statusNotice(Language.text("editor.status.saving.canceled"));
-        return false;
       }
     } catch (Exception e) {
       // show the error as a message in the window
       statusError(e);
     }
-    return true;
+    return false;
   }
 
 
@@ -2567,9 +2380,7 @@ public abstract class Editor extends JFrame implements RunnerListener {
 //      return;
 //    }
 
-    if (e instanceof SketchException) {
-      SketchException re = (SketchException) e;
-
+    if (e instanceof SketchException re) {
       // Make sure something is printed into the console
       // Status bar is volatile
       System.err.println(re.getMessage());
@@ -2789,10 +2600,7 @@ public abstract class Editor extends JFrame implements RunnerListener {
       statusMessage(problem.getMessage(), type);
     } else {
       switch (getStatusMode()) {
-        case EditorStatus.CURSOR_LINE_ERROR:
-        case EditorStatus.CURSOR_LINE_WARNING:
-          statusEmpty();
-          break;
+        case EditorStatus.CURSOR_LINE_ERROR, EditorStatus.CURSOR_LINE_WARNING -> statusEmpty();
       }
     }
   }
@@ -2825,34 +2633,25 @@ public abstract class Editor extends JFrame implements RunnerListener {
   }
 
 
-  /*
-  public void repaintErrorBar() {
-    errorColumn.repaint();
-  }
-
-
-  public void showConsole() {
-    footer.setPanel(console);
-  }
-  */
-
-
   // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 
   static Font toolTipFont;
-  static Color toolTipTextColor;
-  static Color toolTipWarningColor;
-  static Color toolTipErrorColor;
+  static String toolTipTextColor;
+  static String toolTipWarningColor;
+  static String toolTipErrorColor;
+
 
 
   public void statusToolTip(JComponent comp, String message, boolean error) {
-    Color bgColor = error ? toolTipErrorColor : toolTipWarningColor;
-    int m = Toolkit.zoom(3);
+    // Adjust margin if the UI zoom has been manually set larger/smaller
+    int m = Toolkit.zoom(5);
     String css =
-      String.format("margin: %d %d %d %d; ", -m, -m, -m, -m) +
-      String.format("padding: %d %d %d %d; ", m, m, m, m) +
-      "background: #" + PApplet.hex(bgColor.getRGB(), 8).substring(2) + ";" +
+      // https://github.com/AdoptOpenJDK/openjdk-jdk8u/blob/master/jdk/src/share/classes/javax/swing/plaf/basic/BasicToolTipUI.java
+      "margin: 0 -3 0 -3;" +  // Basic LAF adds 3px to either side; yay!
+      String.format("padding: %d %d %d %d; ", m, m*2, m, m*2) +
+      "background: " + (error ? toolTipErrorColor : toolTipWarningColor) + ";" +
+      "color: " + toolTipTextColor + ";" +
       "font-family: " + toolTipFont.getFontName() + ", sans-serif;" +
       "font-size: " + toolTipFont.getSize() + "px;";
     String content =
@@ -2900,11 +2699,11 @@ public abstract class Editor extends JFrame implements RunnerListener {
       item.addActionListener(e -> handleCommentUncomment());
       this.add(item);
 
-      item = new JMenuItem("\u2192 " + Language.text("menu.edit.increase_indent"));
+      item = new JMenuItem("→ " + Language.text("menu.edit.increase_indent"));
       item.addActionListener(e -> handleIndentOutdent(true));
       this.add(item);
 
-      item = new JMenuItem("\u2190 " + Language.text("menu.edit.decrease_indent"));
+      item = new JMenuItem("← " + Language.text("menu.edit.decrease_indent"));
       item.addActionListener(e -> handleIndentOutdent(false));
       this.add(item);
 
