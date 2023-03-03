@@ -7,7 +7,7 @@ https://www.youtube.com/watch?v=RBkOlsDzWCo
 
 https://xgf.nu/70r3
 
-⇒カスタマイズしたProcessing IDEは4.1.2対応です。
+⇒カスタマイズしたProcessing IDEは4.2対応です。
 
 ##### ２．適当なところに展開してください。
 
